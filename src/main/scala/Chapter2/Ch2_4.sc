@@ -233,7 +233,7 @@ object argh {
   }
   val b = {
     println("b")
-    a + 2
+    a + 2 //3
   }
   def c = {
     println("c")

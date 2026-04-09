@@ -82,6 +82,8 @@ Ama bazı exğressionlar anlamlı değer üretemez bu durumda Scala Unit tipini 
 
 
 
+
+
 //2.3.8 Exercises
 //  2.3.8.1 Literally Just Literals
 //  What are the values and types of the following Scala literals?

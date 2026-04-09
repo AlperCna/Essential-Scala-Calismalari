@@ -1,6 +1,8 @@
 //2.2 Objeler Önceki kısımda expression types ve values leri görmüştük ve bütün valueların
 //obje olduğunu öğrendik
 
+
+
 //2.2.1 Obje veri ve o veri üzerine yapılan işlemlerin bir arada bulunduğu yapıdır.
 // Obje 2 şey içerir data ve operations 2 e bir objedir
 //datası int 2 işlemleri ise matematiksel işlemlerdir
@@ -30,7 +32,7 @@
 //• the opঞonal param1, ... is one or more expressions evaluaঞng
 //  to the parameters to the method
 
-
+"Hello".toUpperCase
 //Scala'da method çağrıları bir expressiondur yani yeni bir value üretir bu yüzden de metodlar zincir halinde kullanılabilir
 "hello".toUpperCase.toLowerCase
 

@@ -12,7 +12,11 @@
 // Value kodun çalıştırılmış sonucu
 
 
+"Hello".toUpperCase()
+1.toByte
 //2_1_1
+
+
 
 //Scala içerisinde compile time ve Run time olmak üzere iki kısım bulunuyor
 //  diğer dillerde olduğu gibi

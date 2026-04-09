@@ -11,6 +11,7 @@ case class Person(firstName:String, lastName: String) {
 //Case class tanımlayınca scala otomatk olarak Class ı oluşturur yani Person tipinde nesneler oluşturulabilir
 
 val dave = new Person("Dave","Gurnell")
+val dave2 = new Person("Dave","Gurnell")
 
 dave.name
 
@@ -62,7 +63,9 @@ dave.copy(lastName = "Gurnell2").name
 
 new Person("Noel", "Welsh") eq (new Person("Noel", "Welsh"))
 
-dave eq dave
+dave eq dave2
+dave equals dave2
+
 
 // 5 iki traiti otomatik olarak implement eder
 
