@@ -27,7 +27,8 @@ def generic[A](in: A): A = in
 
 generic[String]("foo")
 
-generic(1)
+generic(1
+
 
 //Type parameter, method parameter gibi çalışır:
 //  Method çağrılırken - değer bağlanır
@@ -102,14 +103,10 @@ Change the name to LinkedList and make it generic in the type of data
 stored in the list
  */
 
-sealed trait IntList
-case object End extends IntList
-final case class Pair(head: Int, tail: IntList) extends IntList
+//sealed trait IntList
+//case object End extends IntList
+//final case class Pair(head: Int, tail: IntList) extends IntList
 
-
-sealed trait LinkedList[A]
-case class End[A]() extends LinkedList[A]
-final case class Pair[A](head:A, tail :LinkedList[A]) extends LinkedList[A]
 
 
 /*
@@ -127,5 +124,110 @@ assert(example.tail.length == 2)
 assert(End().length == 0)
  */
 
+//sealed trait LinkedList[A] {
+//  def length: Int =
+//    this match {
+//      case Pair(hd, tl) => 1 + tl.length
+//      case End() => 0
+//    }
+//}
+//final case class Pair[A](head: A, tail: LinkedList[A]) extends LinkedList[A]
+//final case class End[A]() extends LinkedList[A]
 
-2. ÖRNEK YAPILACAK
+
+
+//On the JVM we can compare all values for equality. Implement a method
+//contains that determines whether or not a given item is in the list. Ensure
+//your code works with the following test cases:
+//val example = Pair(1, Pair(2, Pair(3, End())))
+//assert(example.contains(3) == true)
+//assert(example.contains(4) == false)
+//assert(End().contains(0) == false)
+//// This should not compile
+//// example.contains("not an Int")
+
+sealed trait LinkedList[A] {
+  def contains(item: A): Boolean =
+    this match {
+      case Pair(hd, tl) =>
+        if(hd == item)
+          true
+        else
+          tl.contains(item)
+      case End() => false
+    }
+}
+final case class Pair[A](head: A, tail: LinkedList[A]) extends
+  LinkedList[A]
+final case class End[A]() extends LinkedList[A]
+
+
+//Implement a method apply that returns the nth item in the list
+//Hint: If you need to signal an error in your code (there’s one situaঞon in which
+//you will need to do this), consider throwing an excepঞon. Here is an example:
+//throw new Exception("Bad things happened")
+//Ensure your soluঞon works with the following test cases:
+//val example = Pair(1, Pair(2, Pair(3, End())))
+//assert(example(0) == 1)
+//assert(example(1) == 2)
+//assert(example(2) == 3)
+//assert(try {
+//example(3)
+//false
+//} catch {
+//case e: Exception => true
+//})
+
+
+sealed trait LinkedList[A] {
+  def apply(index: Int): A =
+    this match {
+      case Pair(hd, tl) =>
+        if(index == 0)
+          hd
+        else
+          tl(index - 1)
+      case End() =>
+        throw new Exception("Attempted to get element from an Empty list")
+    }
+}
+final case class Pair[A](head: A, tail: LinkedList[A]) extends
+  LinkedList[A]
+final case class End[A]() extends LinkedList[A]
+
+
+
+//Throwing an excepঞon isn’t cool. Whenever we throw an excepঞon we lose
+//type safety as there is nothing in the type system that will remind us to deal
+//with the error. It would be much beer to return some kind of result that
+//encodes we can succeed or failure. We introduced such a type in this very
+//secঞon.
+//sealed trait Result[A]
+//case class Success[A](result: A) extends Result[A]
+//case class Failure[A](reason: String) extends Result[A]
+//Change apply so it returns a Result, with a failure case indicaঞng what went
+//wrong. Here are some test cases to help you:
+//assert(example(0) == Success(1))
+//assert(example(1) == Success(2))
+//assert(example(2) == Success(3))
+//assert(example(3) == Failure("Index out of bounds"))
+
+sealed trait Result[A]
+case class Success[A](result: A) extends Result[A]
+case class Failure[A](reason: String) extends Result[A]
+sealed trait LinkedList[A] {
+  def apply(index: Int): Result[A] =
+    this match {
+      case Pair(hd, tl) =>
+        if(index == 0)
+          Success(hd)
+        else
+          tl(index - 1)
+
+      case End() =>
+        Failure("Index out of bounds")
+    }
+}
+final case class Pair[A](head: A, tail: LinkedList[A]) extends
+  LinkedList[A]
+final case class End[A]() extends LinkedList[A]

@@ -285,3 +285,144 @@ def someMethod = {
   empty[Int]
 }
 // `empty` is unbound here again
+
+
+
+//6.1.9 Exercises
+//6.1.9.1 Documentaঞon
+//Discovering Scala’s collecঞon classes is all about knowing how to read the
+//API documentaঞon. Look up the Seq and List types now and answer the
+//following:
+//• There is a synonym of length defined on Seq—what is it called?
+//• There are two methods for retrieving the first item in a List – what are
+//they called and how do they differ?
+//• What method can be used to display the elements of the sequence as
+//a string?
+//• What method of Option can be used to determine whether the opঞon
+//contains a value?
+//Tip: There is a link to the Scala API documentaঞon at http://scala-lang.org.
+
+
+
+//The synonym for length is size.
+//  The methods for retrieving the first element in a list are: - head —returns A,
+//throwing an excepঞon if the list is empty - headOption—returns Option[A],
+//returning None if the list is empty
+//  The mkString method allows us to quickly display a Seq as a String:
+  Seq(1, 2, 3).mkString(",") // returns "1,2,3"
+Seq(1, 2, 3).mkString("[ ", ", ", " ]") // returns "[ 1, 2, 3 ]"
+//Options contain two methods, isDefined and isEmpty, that we can use as
+//a quick test:
+  Some(123).isDefined // returns true
+Some(123).isEmpty // returns false
+None.isDefined // returns false
+None.isEmpty // returns true
+
+
+
+//6.1.9.2 Animals
+//Create a Seq containing the Strings "cat", "dog", and "penguin". Bind it
+//to the name animals.
+
+val animals  = Seq("cat","dog","penguin")
+
+
+//Append the element "tyrannosaurus" to animals and prepend the element
+//"mouse".
+
+"mouse" +: animals :+ "tyrannosaurus"
+
+//What happens if you prepend the Int 2 to animals? Why? Try it out… were
+//you correct?
+
+//The returned sequence has type Seq[Any]. It is perfectly valid to return a
+//supertype (in this case Seq[Any]) from a non-destrucঞve operaঞon.
+//2 +: animals
+//You might expect a type error here, but Scala is capable of determining the
+//least upper bound of String and Int and seমng the type of the returned
+//sequence accordingly.
+//In most real code appending an Int to a Seq[String] would be an error. In
+//pracঞce, the type annotaঞons we place on methods and fields protect against
+//this kind of type error, but be aware of this behaviour just in case.
+
+
+
+//6.1.9.3 Intranet Movie Database
+//Let’s revisit our films and directors example from the Classes chapter.
+//The code below is a parঞal rewrite of the previous sample code in which Films
+//is stored as a field of Director instead of the other way around. Copy and
+//paste this into a new Scala worksheet and conঞnue with the exercises below:
+case class Film(
+name: String,
+yearOfRelease: Int,
+imdbRating: Double)
+case class Director(
+firstName: String,
+lastName: String,
+yearOfBirth: Int,
+films: Seq[Film])
+val memento = new Film("Memento", 2000, 8.5)
+val darkKnight = new Film("Dark Knight", 2008, 9.0)
+val inception = new Film("Inception", 2010, 8.8)
+val highPlainsDrifter = new Film("High Plains Drifter", 1973, 7.7)
+val outlawJoseyWales = new Film("The Outlaw Josey Wales", 1976, 7.9)
+val unforgiven = new Film("Unforgiven", 1992, 8.3)
+val granTorino = new Film("Gran Torino", 2008, 8.2)
+val invictus = new Film("Invictus", 2009, 7.4)
+val predator = new Film("Predator", 1987, 7.9)
+val dieHard = new Film("Die Hard", 1988, 8.3)
+val huntForRedOctober = new Film("The Hunt for Red October", 1990,
+7.6)
+val thomasCrownAffair = new Film("The Thomas Crown Affair", 1999, 6.8)
+val eastwood = new Director("Clint", "Eastwood", 1930,
+Seq(highPlainsDrifter, outlawJoseyWales, unforgiven, granTorino,
+invictus))
+val mcTiernan = new Director("John", "McTiernan", 1951,
+Seq(predator, dieHard, huntForRedOctober, thomasCrownAffair))
+val nolan = new Director("Christopher", "Nolan", 1970,
+Seq(memento, darkKnight, inception))
+val someGuy = new Director("Just", "Some Guy", 1990,
+Seq())
+val directors = Seq(eastwood, mcTiernan, nolan, someGuy)
+//Using this sample code, write implementaঞons of the following methods:
+
+
+//• Accept a parameter numberOfFilms of type Int—find all directors who
+//have directed more than numberOfFilms:
+
+
+def directorsWithBackCatalogOfSize(numberOfFilms: Int): Seq[Director]
+=
+  directors.filter(_.films.length > numberOfFilms)
+
+
+  //• Accept a parameter year of type Int—find a director who was born
+//before that year:
+
+def directorBornBefore(year: Int): Option[Director] =
+  directors.find(_.yearOfBirth < year)
+
+
+//Accept two parameters, year and numberOfFilms, and return a list
+//of directors who were born before year who have also directed more
+//than than numberOfFilms:
+
+def directorBornBeforeWithBackCatalogOfSize(year: Int, numberOfFilms:
+Int): Seq[Director] = {
+  val byAge = directors.filter(_.yearOfBirth < year)
+  val byFilms = directors.filter(_.films.length > numberOfFilms)
+  byAge.filter(byFilms.contains)
+}
+
+
+//• Accept a parameter ascending of type Boolean that defaults to true.
+//Sort the directors by age in the specified order:
+
+def directorsSortedByAge(ascending: Boolean = true) =
+  directors.sortWith { (a, b) =>
+    if(ascending) {
+      a.yearOfBirth < b.yearOfBirth
+    } else {
+      a.yearOfBirth > b.yearOfBirth
+    }
+  }

@@ -374,3 +374,143 @@ flatMap
 
 Bir değeri dönüştürmek ve aynı zamanda yeni bir bağlam sağlamak istediğimizde kullanılır.
  */
+
+
+//
+//5.5.4 Exercises
+//  5.5.4.1 Mapping Lists
+//Given the following list
+val list: LinkedList[Int] = Pair(1, Pair(2, Pair(3, End())))
+//• double all the elements in the list;
+//• add one to all the elements in the list; and
+//• divide by three all the elements in the list.
+
+list.map(_ * 2)
+list.map(_ + 1)
+list.map(_ / 3)
+
+
+//5.5.4.2 Mapping Maybe
+//Implement map for Maybe.
+
+sealed trait Maybe[A] {
+  def flatMap[B](fn: A => Maybe[B]): Maybe[B] =
+    this match {
+      case Full(v) => fn(v)
+      case Empty() => Empty[B]()
+    }
+  def map[B](fn: A => B): Maybe[B] =
+    this match {
+      case Full(v) => Full(fn(v))
+      case Empty() => Empty[B]()
+    }
+}
+
+final case class Full[A](value: A) extends Maybe[A]
+final case class Empty[A]() extends Maybe[A]
+
+
+//5.5.4.3 Sequencing Computaঞons
+//We’re going to use Scala’s builঞn List class for this exercise as it has a
+//flatMap method.
+//Given this list
+val list = List(1, 2, 3)
+//return a List[Int] containing both all the elements and their negaঞon. Order
+//is not important. Hint: Given an element create a list containing it and its
+//negaঞon.
+
+
+list.flatMap(x => List(x, -x))
+
+
+
+//Given this list
+val list: List[Maybe[Int]] = List(Full(3), Full(2), Full(1))
+//return a List[Maybe[Int]] containing None for the odd elements. Hint: If
+//x % 2 == 0 then x is even
+
+
+list.map(maybe => maybe.flatMap[Int] { x => if (x % 2 == 0) Full(x)
+else Empty() })
+
+
+
+//5.5.4.4 Sum
+//Recall our Sum type.
+sealed trait Sum[A, B] {
+def fold[C](left: A => C, right: B => C): C =
+this match {
+case Left(a) => left(a)
+case Right(b) => right(b)
+}
+}
+//final case class Left[A, B](value: A) extends Sum[A, B]
+//final case class Right[A, B](value: B) extends Sum[A, B]
+//To prevent a name collision between the built-in Either, rename the Left
+//and Right cases to Failure and Success respecঞvely
+
+
+sealed trait Sum[A, B] {
+  def fold[C](error: A => C, success: B => C): C =
+    this match {
+      case Failure(v) => error(v)
+      case Success(v) => success(v)
+    }
+}
+final case class Failure[A, B](value: A) extends Sum[A, B]
+final case class Success[A, B](value: B) extends Sum[A, B]
+
+
+
+//Now things are going to get a bit trickier. We are going to implement map and
+//flatMap, again using paern matching in the Sum trait. Start with map. The
+//general recipe for map is to start with a type like F[A] and apply a funcঞon
+//A => B to get F[B]. Sum however has two generic type parameters. To make
+//it fit the F[A] paern we’re going to fix one of these parameters and allow
+//map to alter the other one. The natural choice is to fix the type parameter
+//associated with Failure and allow map to alter a Success. This corresponds
+//to “fail-fast” behaviour. If our Sum has failed, any sequenced computaঞons
+//don’t get run.
+//In summary map should have type
+
+//def map[C](f: B => C): Sum[A, C]
+
+
+sealed trait Sum[A, B] {
+  def fold[C](error: A => C, success: B => C): C =
+    this match {
+      case Failure(v) => error(v)
+      case Success(v) => success(v)
+    }
+  def map[C](f: B => C): Sum[A, C] =
+    this match {
+      case Failure(v) => Failure(v)
+      case Success(v) => Success(f(v))
+    }
+}
+final case class Failure[A, B](value: A) extends Sum[A, B]
+final case class Success[A, B](value: B) extends Sum[A, B]
+
+
+//Now implement flatMap using the same logic as map.
+
+
+sealed trait Sum[A, B] {
+  def fold[C](error: A => C, success: B => C): C =
+    this match {
+      case Failure(v) => error(v)
+      case Success(v) => success(v)
+    }
+  def map[C](f: B => C): Sum[A, C] =
+  this match {
+    case Failure(v) => Failure(v)
+    case Success(v) => Success(f(v))
+  }
+  def flatMap[C](f: B => Sum[A, C]) =
+    this match {
+      case Failure(v) => Failure(v)
+      case Success(v) => f(v)
+    }
+}
+final case class Failure[A, B](value: A) extends Sum[A, B]
+final case class Success[A, B](value: B) extends Sum[A, B]

@@ -376,3 +376,122 @@ case class WebAnalytics[A <: Visitor]
 (visitor: A, pageViews: Int, searchTerms: List[String], isOrganic:Boolean)
 
 //Visitor ya da onun herhangi bir subtype’ını saklayabilir
+
+
+
+
+//5.6.6 Exercises
+//5.6.6.1 Covariance and Contravariance
+//Using the notaঞon A <: B to indicate A is a subtype of B and assuming:
+//• Siamese <: Cat <: Animal; and
+//• Purr <: CatSound <: Sound
+//if I have a method
+//def groom(groomer: Cat => CatSound): CatSound = {
+//val oswald = Cat("Black", "Cat food")
+//groomer(oswald)
+//}
+//which of the following can I pass to groom?
+//• A funcঞon of type Animal => Purr
+//• A funcঞon of type Siamese => Purr
+//• A funcঞon of type Animal => Sound
+
+
+//The only funcঞon that will work is the the funcঞon of type Animal => Purr.
+//The Siamese => Purr funcঞon will not work because the Oswald is a not
+//a Siamese cat. The Animal => Sound funcঞon will not work because we
+//require the return type to be a CatSound.
+
+
+//5.6.6.2 Calculator Again
+//We’re going to return to the interpreter example we saw at the end of the last
+//chapter. This ঞme we’re going to use the general abstracঞons we’ve created
+//in this chapter, and our new knowledge of map, flatMap, and fold.
+//We’re going to represent calculaঞons as Sum[String, Double], where the
+//String is an error message. Extend Sum to have map and fold method.
+
+sealed trait Sum[+A, +B] {
+  def fold[C](error: A => C, success: B => C): C =
+    this match {
+      case Failure(v) => error(v)
+      case Success(v) => success(v)
+    }
+  def map[C](f: B => C): Sum[A, C] =
+    this match {
+      case Failure(v) => Failure(v)
+      case Success(v) => Success(f(v))
+    }
+  def flatMap[AA >: A, C](f: B => Sum[AA, C]): Sum[AA, C] =
+    this match {
+      case Failure(v) => Failure(v)
+      case Success(v) => f(v)
+    }
+}
+final case class Failure[A](value: A) extends Sum[A, Nothing]
+final case class Success[B](value: B) extends Sum[Nothing, B]
+
+
+
+//Now we’re going to reimplement the calculator from last ঞme. We have an
+//abstract syntax tree defined via the following algebraic data type:
+//sealed trait Expression
+//final case class Addition(left: Expression, right: Expression) extends
+//Expression
+//final case class Subtraction(left: Expression, right: Expression)
+//extends Expression
+//final case class Division(left: Expression, right: Expression) extends
+//Expression
+//160 CHAPTER 5. SEQUENCING COMPUTATIONS
+//final case class SquareRoot(value: Expression) extends Expression
+//final case class Number(value: Double) extends Expression
+//Now implement a method eval: Sum[String, Double] on Expression.
+//Use flatMap and map on Sum and introduce any uঞlity methods you see fit to
+//make the code more compact. Here are some test cases:
+//assert(Addition(Number(1), Number(2)).eval == Success(3))
+//assert(SquareRoot(Number(-1)).eval == Failure("Square root of negative
+//number"))
+//assert(Division(Number(4), Number(0)).eval == Failure("Division by
+//zero"))
+//assert(Division(Addition(Subtraction(Number(8), Number(6)), Number(2))
+//, Number(2)).eval == Success(2.0)
+
+
+
+
+sealed trait Expression {
+  def eval: Sum[String, Double] =
+    this match {
+      case Addition(l, r) => lift2(l, r, (left, right) => Success(left
+        + right))
+      case Subtraction(l, r) => lift2(l, r, (left, right) => Success(
+        left - right))
+      case Division(l, r) => lift2(l, r, (left, right) =>
+        if(right == 0)
+          Failure("Division by zero")
+        else
+          Success(left / right)
+      )
+      case SquareRoot(v) =>
+        v.eval flatMap { value =>
+          if(value < 0)
+            Failure("Square root of negative number")
+          else
+            Success(Math.sqrt(value))
+        }
+      case Number(v) => Success(v)
+    }
+  def lift2(l: Expression, r: Expression, f: (Double, Double) => Sum[
+    String, Double]) =
+    l.eval.flatMap { left =>
+      r.eval.flatMap { right =>
+        f(left, right)
+      }
+    }
+}
+final case class Addition(left: Expression, right: Expression) extends
+  Expression
+final case class Subtraction(left: Expression, right: Expression)
+  extends Expression
+final case class Division(left: Expression, right: Expression) extends
+  Expression
+final case class SquareRoot(value: Expression) extends Expression
+final case class Number(value: Int) extends Expression

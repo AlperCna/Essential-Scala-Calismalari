@@ -245,3 +245,46 @@ def foldMultipleLists[A, B](list: LinkedList[A], end: B)(pair: (A, B) => B): B =
 //end → B’yi belirler
 //sonra pair için bu B kullanılır
 //type yazmamıza gerek kalmaz
+
+
+
+//5.3.4 Exercises
+//5.3.4.1 Tree
+//A binary tree can be defined as follows:
+//A Tree of type A is a Node with a le[ and right Tree or a Leaf with an element
+//of type A.
+//Implement this algebraic data type along with a fold method.
+
+
+sealed trait Tree[A] {
+  def fold[B](node: (B, B) => B, leaf: A => B): B
+}
+final case class Node[A](left: Tree[A], right: Tree[A]) extends Tree[A
+] {
+  def fold[B](node: (B, B) => B, leaf: A => B): B =
+    node(left.fold(node, leaf), right.fold(node, leaf))
+}
+final case class Leaf[A](value: A) extends Tree[A] {
+  def fold[B](node: (B, B) => B, leaf: A => B): B =
+    leaf(value)
+}
+
+
+
+//Using fold convert the following Tree to a String
+//val tree: Tree[String] =
+//Node(Node(Leaf("To"), Leaf("iterate")),
+//Node(Node(Leaf("is"), Leaf("human,")),
+//Node(Leaf("to"), Node(Leaf("recurse"), Leaf("divine")))))
+//Remember you can append Strings using the + method.
+
+
+//If one type parameter is good, two type parameters are beer:
+case class Pair[A, B](one: A, two: B)
+//This is just the product type paern we have seen before, but we introduce
+//generic types.
+
+//Note that we don’t always need to specify the type parameters when we construct Pairs. The compiler will aempt to infer the types as usual wherever
+//it can:
+val pair = Pair("hi", 2)
+// pair: Pair[String,Int] = Pair(hi,2)

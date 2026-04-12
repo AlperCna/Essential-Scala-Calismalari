@@ -189,3 +189,60 @@ final case class Empty[A]() extends Maybe[A]
 
 val perhaps: Maybe[Int] = Empty[Int]
 val perhaps: Maybe[Int] = Full(1)
+
+
+//5.4.6 Exercises
+//5.4.6.1 Generics versus Traits
+//Sum types and product types are general concepts that allow us to model
+//almost any kind of data structure. We have seen two methods of wriঞng these
+//types—traits and generics. When should we consider using each?
+
+
+//Ulঞmately the decision is up to us. Different teams will adopt different programming styles. However, we look at the properঞes of each approach to
+//inform our choices:
+//Inheritance-based approaches—traits and classes—allow us to create permanent data structures with specific types and names. We can name every field
+//and method and implement use-case-specific code in each class. Inheritance
+//is therefore beer suited to modelling significant aspects of our programs that
+//are re-used in many areas of our codebase.
+//Generic data structures—Tuples, Options, Eithers, and so on—are extremely broad and general purpose. There are a wide range of predefined
+//classes in the Scala standard library that we can use to quickly model relaঞonships between data in our code. These classes are therefore beer suited
+//to quick, one-off pieces of data manipulaঞon where defining our own types
+//would introduce unnecessary verbosity to our codebase.
+
+
+
+//In this secঞon we implemented a sum type for modelling opঞonal data:
+//sealed trait Maybe[A]
+//final case class Full[A](value: A) extends Maybe[A]
+//final case class Empty[A]() extends Maybe[A]
+//Implement fold for this type.
+
+
+sealed trait Maybe[A] {
+  def fold[B](full: A => B, empty: B): B =
+    this match {
+      case Full(v) => full(v)
+      case Empty() => empty
+    }
+}
+final case class Full[A](value: A) extends Maybe[A]
+final case class Empty[A]() extends Maybe[A]
+
+
+//5.4.6.3 Folding Sum
+//In this secঞon we implemented a generic sum type:
+//sealed trait Sum[A, B]
+//final case class Left[A, B](value: A) extends Sum[A, B]
+//final case class Right[A, B](value: B) extends Sum[A, B]
+//Implement fold for Sum
+
+
+sealed trait Sum[A, B] {
+  def fold[C](left: A => C, right: B => C): C =
+    this match {
+      case Left(a) => left(a)
+      case Right(b) => right(b)
+    }
+}
+final case class Left[A, B](value: A) extends Sum[A, B]
+final case class Right[A, B](value: B) extends Sum[A, B]

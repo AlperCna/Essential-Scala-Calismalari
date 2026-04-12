@@ -135,3 +135,100 @@ the expression determines the result of the funcঞon.
  */
 
 //5.2.3 Exercises
+
+//5.2.3.1 A Beer Abstracঞon
+//We started developing an abstracঞon over sum, length, and product which
+//we sketched out as
+//def abstraction(end: Int, f: ???): Int =
+//this match {
+//case End => end
+//case Pair(hd, tl) => f(hd, tl.abstraction(end, f))
+//}
+//Rename this funcঞon to fold, which is the name it is usually known as, and
+//finish the implementaঞon.
+
+sealed trait IntList {
+  def fold(end: Int, f: (Int, Int) => Int): Int =
+    this match {
+      case End => end
+      case Pair(hd, tl) => f(hd, tl.fold(end, f))
+    }
+}
+case object End extends IntList
+final case class Pair(head: Int, tail: IntList) extends IntList
+
+
+//Now reimplement sum, length, and product in terms of fold.
+
+sealed trait IntList {
+  def fold(end: Int, f: (Int, Int) => Int): Int =
+    this match {
+      case End => end
+      case Pair(hd, tl) => f(hd, tl.fold(end, f))
+    }
+
+  def length: Int =
+    fold(0, (_, tl) => 1 + tl)
+  def product: Int =
+    fold(1, (hd, tl) => hd * tl)
+  def sum: Int =
+    fold(0, (hd, tl) => hd + tl)
+}
+
+case object End extends IntList
+final case class Pair(head: Int, tail: IntList) extends IntList
+
+
+//Is it more convenient to rewrite methods in terms of fold if they were implemented using paern matching or polymorphic? What does this tell us about
+//the best use of fold?
+
+
+//When using fold in polymorphic implementaঞons we have a lot of duplicaঞon; the polymorphic implementaঞons without fold were simpler to write.
+//The paern matching implementaঞons benefied from fold as we removed
+//the duplicaঞon in the paern matching.
+//In general fold makes a good interface for users outside the class, but not
+//necessarily for use inside the class.
+
+
+
+//Why can’t we write our double method in terms of fold? Is it feasible we
+//could if we made some change to fold?
+
+
+//The types tell us it won’t work. fold returns an Int and double returns an
+//  IntList. However the general structure of double is captured by fold. This
+//is apparent if we look at them side-by-side:
+def double: IntList =
+  this match {
+    case End => End
+    case Pair(hd, tl) => Pair(hd * 2, tl.double)
+  }
+def fold(end: Int, f: (Int, Int) => Int): Int =
+  this match {
+    case End => end
+    case Pair(hd, tl) => f(hd, tl.fold(end, f))
+  }
+
+//If we could generalise the types of fold from Int to some general type then
+//we could write double. And that, dear reader, is what we turn to next.
+
+
+//Implement a generalised version of fold and rewrite double in terms of it.
+
+sealed trait IntList {
+  def fold[A](end: A, f: (Int, A) => A): A =
+    this match {
+      case End => end
+      case Pair(hd, tl) => f(hd, tl.fold(end, f))
+    }
+  def length: Int =
+    fold[Int](0, (_, tl) => 1 + tl)
+  def product: Int =
+    fold[Int](1, (hd, tl) => hd * tl)
+  def sum: Int =
+    fold[Int](0, (hd, tl) => hd + tl)
+  def double: IntList =
+    fold[IntList](End, (hd, tl) => Pair(hd * 2, tl))
+}
+case object End extends IntList
+final case class Pair(head: Int, tail: IntList) extends IntList
