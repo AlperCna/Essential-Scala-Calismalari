@@ -91,3 +91,41 @@ if(0) "yes" else "no"
 //| Kontrollü   | ✔              | ❌                   |
 //| Debug kolay | ✔              | ❌                   |
 //| Önerilen    | ✔              | ❌                   |
+
+
+
+
+//7.8.3 Exercises
+//7.8.3.1 Implicit Class Conversion
+//Any implicit class can be reimplemented as a class paired with an implicit
+//method. Re-implement the IntOps class from the type enrichment secঞon
+//in this way. Verify that the class sঞll works the same way as it did before.
+
+object IntImplicits {
+  class IntOps(n: Int) {
+    def yeah() =
+      times(_ => println("Oh yeah!"))
+    def times(func: Int => Unit) =
+      for(i <- 0 until n) func(i)
+  }
+  implicit def intToIntOps(value: Int) =
+    new IntOps(value)
+}
+
+
+//The code sঞll works the same way it did previously. The implicit conversion is
+//  not available unঞl we bring it into scope:
+  5.yeah()
+// <console>:18: error: value yeah is not a member of Int
+// 5.yeah()
+// ^
+//Once the conversion has been brought into scope, we can use yeah and times
+//  as usual:
+
+import IntImplicits._
+5.yeah()
+// Oh yeah!
+// Oh yeah!
+// Oh yeah!
+// Oh yeah!
+// Oh yeah!

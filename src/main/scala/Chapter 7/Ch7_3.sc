@@ -137,3 +137,35 @@ def doSomething(in: A): Foo
 }
 
  */
+
+
+
+//7.3.4 Exercises
+//7.3.4.1 Equality
+//Scala provides two equality predicates: by value (==) and by reference (eq).
+//Nonetheless, we someঞmes need addiঞonal predicates. For instance, we
+//could compare people by just email address if we were validaঞng new user
+//accounts in some web applicaঞon.
+//Implement a trait Equal of some type A, with a method equal that compares
+//two values of type A and returns a Boolean. Equal is a type class.
+
+trait Equal[A] {
+  def equal(v1: A, v2: A): Boolean
+}
+
+
+//Our Person class is
+case class Person(name: String, email: String)
+//Implement instances of Equal that compare for equality by email address only,
+//and by name and email.
+
+
+object EmailEqual extends Equal[Person] {
+  def equal(v1: Person, v2: Person): Boolean =
+    v1.email == v2.email
+}
+
+object NameEmailEqual extends Equal[Person] {
+  def equal(v1: Person, v2: Person): Boolean =
+    v1.email == v2.email && v1.name == v2.name
+}

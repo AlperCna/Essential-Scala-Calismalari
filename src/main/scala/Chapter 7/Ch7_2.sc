@@ -278,3 +278,40 @@ object RationalGreaterThanOrdering {
 //veya
 //
 //import RationalGreaterThanOrdering.
+
+
+
+//7.2.5 Exercises
+//7.2.5.1 Ordering Orders
+//Here is a case class to store orders of some arbitrary item.
+//final case class Order(units: Int, unitPrice: Double) {
+//val totalPrice: Double = units * unitPrice
+//}
+//We have a requirement to order Orders in three different ways:
+//1. by totalPrice;
+//2. by number of units; and
+//3. by unitPrice.
+//Implement and package implicits to provide these orderings, and jusঞfy your
+//packaging.
+
+
+final case class Order(units: Int, unitPrice: Double) {
+  val totalPrice: Double = units * unitPrice
+}
+object Order {
+  implicit val lessThanOrdering = Ordering.fromLessThan[Order]{ (x, y)
+  =>
+    x.totalPrice < y.totalPrice
+  }
+}
+object OrderUnitPriceOrdering {
+  implicit val unitPriceOrdering = Ordering.fromLessThan[Order]{ (x, y
+                                                                 ) =>
+    x.unitPrice < y.unitPrice
+  }
+}
+object OrderUnitsOrdering {
+  implicit val unitsOrdering = Ordering.fromLessThan[Order]{ (x, y) =>
+    x.units < y.units
+  }
+}

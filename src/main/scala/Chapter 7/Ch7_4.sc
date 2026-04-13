@@ -134,3 +134,77 @@ def apply[A](implicit instance: TypeClass[A]): TypeClass[A] =
 instance
 }
  */
+
+
+
+
+//7.4.4 Exercises
+//7.4.4.1 Equality Again
+//In the previous secঞon we defined a trait Equal along with some implementaঞons for Person.
+case class Person(name: String, email: String)
+trait Equal[A] {
+def equal(v1: A, v2: A): Boolean
+}
+object EmailEqual extends Equal[Person] {
+def equal(v1: Person, v2: Person): Boolean =
+v1.email == v2.email
+}
+object NameEmailEqual extends Equal[Person] {
+def equal(v1: Person, v2: Person): Boolean =
+v1.email == v2.email && v1.name == v2.name
+}
+//Implement an object called Eq with an apply method. This method should
+//accept two explicit parameters of type A and an implicit Equal[A]. It should
+//perform the equality checking using the provided Equal. With appropriate
+//implicits in scope, the following code should work
+//Eq(Person("Noel", "noel@example.com"), Person("Noel", "noel@example.
+//com"))
+
+
+object Eq {
+  def apply[A](v1: A, v2: A)(implicit equal: Equal[A]): Boolean =
+    equal.equal(v1, v2)
+}
+
+
+//Package up the different Equal implementaঞons as implicit values in their own
+//objects, and show you can control the implicit selecঞon by changing which
+//object is imported.
+
+
+object NameAndEmailImplicit {
+  implicit object NameEmailEqual extends Equal[Person] {
+    def equal(v1: Person, v2: Person): Boolean =
+      v1.email == v2.email && v1.name == v2.name
+  }
+}
+object EmailImplicit {
+  implicit object EmailEqual extends Equal[Person] {
+    def equal(v1: Person, v2: Person): Boolean =
+      v1.email == v2.email
+  }
+}
+object Examples {
+  def byNameAndEmail = {
+    import NameAndEmailImplicit._
+    Eq(Person("Noel", "noel@example.com"), Person("Noel", "noel@example.com"))
+  }
+
+  def byEmail = {
+    import EmailImplicit._
+    Eq(Person("Noel", "noel@example.com"), Person("Dave", "noel@example.com"))
+  }
+}
+
+
+
+//Now implement an interface on the companion object for Equal using the
+//no-argument apply method paern. The following code should work.
+//import NameAndEmailImplicit._
+//Equal[Person].equal(Person("Noel", "noel@example.com"), Person("Noel",Which interface style do you prefer?
+
+
+object Equal {
+  def apply[A](implicit instance: Equal[A]): Equal[A] =
+    instance
+}

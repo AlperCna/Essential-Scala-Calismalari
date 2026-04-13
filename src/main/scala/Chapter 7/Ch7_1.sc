@@ -133,3 +133,48 @@ implicit val maxOrdering = Ordering.fromLessThan[Int](_ > _)
 
 //The rule is simple: the compiler will signal an error if there is any ambiguity in
 //which implicit value should be used. aynı tipten sadece 1 impliccit olmalı
+
+
+
+
+//7.1.6 Exercises
+//  7.1.6.1 More Orderings
+//Define an Ordering that orders Ints from lowest to highest by absolute value.
+//  The following test cases should pass.
+
+
+val absOrdering = Ordering.fromLessThan[Int]{ (x, y) =>
+  Math.abs(x) < Math.abs(y)
+}
+
+assert(List(-4, -1, 0, 2, 3).sorted(absOrdering) == List(0, -1, 2, 3,
+  -4))
+assert(List(-4, -3, -2, -1).sorted(absOrdering) == List(-1, -2, -3,
+  -4))
+
+
+
+//Now make your ordering an implicit value, so the following test cases work.
+implicit val absOrdering = Ordering.fromLessThan[Int]{ (x, y) =>
+  Math.abs(x) < Math.abs(y)
+}
+assert(List(-4, -1, 0, 2, 3).sorted == List(0, -1, 2, 3, -4))
+assert(List(-4, -3, -2, -1).sorted == List(-1, -2, -3, -4))
+
+
+
+
+
+//7.1.6.2 Raঞonal Orderings
+//Scala doesn’t have a class to represent raঞonal numbers, but we can easily
+//implement one ourselves.
+final case class Rational(numerator: Int, denominator: Int)
+//Implement an Ordering for Rational to order raঞonals from smallest to
+//largest. The following test case should pass.
+//assert(List(Rational(1, 2), Rational(3, 4), Rational(1, 3)).sorted ==
+//List(Rational(1, 3), Rational(1, 2), Rational(3, 4)))
+
+implicit val ordering = Ordering.fromLessThan[Rational]((x, y) =>
+  (x.numerator.toDouble / x.denominator.toDouble) <
+    (y.numerator.toDouble / y.denominator.toDouble)
+)
