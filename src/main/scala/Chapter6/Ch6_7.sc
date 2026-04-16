@@ -7,7 +7,10 @@
 
 //For comprehension içinde if kullanarak elemanları filtreleyebiliriz.
 
-for(x <- Seq(-2, -1, 0, 1, 2) if x > 0) yield x
+for(
+  x <- Seq(-2, -1, 0, 1, 2)
+  if x > 0
+) yield x
 // res0: Seq[Int] = List(1, 2)
 
 //sequence’i dolaşıyor
@@ -49,7 +52,10 @@ Seq(1, 2, 3).zip(Seq(4, 5, 6))
 
 //With this we can easily compute the result we wanted
 
-for(x <- Seq(1, 2, 3).zip(Seq(4, 5, 6))) yield { val (a, b) = x; a + b
+for(
+  x <- Seq(1, 2, 3).zip(Seq(4, 5, 6))
+  ) yield {
+  val (a, b) = x; a + b
 }
 // res3: Seq[Int] = List(5, 7, 9)
 

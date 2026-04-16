@@ -372,8 +372,8 @@ def f[TT >: T](t: TT): A[TT] = ???
 //
 //  A, Type’ın supertype’ı olmalıdır
 
-case class WebAnalytics[A <: Visitor]
-(visitor: A, pageViews: Int, searchTerms: List[String], isOrganic:Boolean)
+//case class WebAnalytics[A <: Visitor]
+//(visitor: A, pageViews: Int, searchTerms: List[String], isOrganic:Boolean)
 
 //Visitor ya da onun herhangi bir subtype’ını saklayabilir
 

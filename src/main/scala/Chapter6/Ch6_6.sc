@@ -80,10 +80,10 @@ import scala.util.Try
 //varsa devam et
 //Ama Option monad olduğu için bunları map, flatMap, for ile çok temiz şekilde yazabiliyoruz.
 
-for {
-  a <- getFirstNumber // getFirstNumber returns Option[Int]
-  b <- getSecondNumber // getSecondNumber returns Option[Int]
-} yield a + b
+//for {
+//  a <- getFirstNumber // getFirstNumber returns Option[Int]
+//  b <- getSecondNumber // getSecondNumber returns Option[Int]
+//} yield a + b
 // The final result is an Option[Int]---the result of
 // applying `+` to `a` and `b` if both values are present
 
@@ -126,12 +126,12 @@ for {
 //
 //  Ama Seq monad olduğu için yine aynı yapıyı yazabiliyoruz:
 
-for {
-  a <- getFirstNumbers // getFirstNumbers returns Seq[Int]
-  b <- getSecondNumbers // getSecondNumbers returns Seq[Int]
-} yield a + b
-// The final result is a Seq[Int]---the results of
-// applying `+` to all combinations of `a` and `b`
+//for {
+//  a <- getFirstNumbers // getFirstNumbers returns Seq[Int]
+//  b <- getSecondNumbers // getSecondNumbers returns Seq[Int]
+//} yield a + b
+//// The final result is a Seq[Int]---the results of
+//// applying `+` to all combinations of `a` and `b`
 
 
 //Diyelim:
@@ -168,10 +168,10 @@ for {
 //bloklama olmaması gibi dertler olur.
 //Ama Future monad olarak kullanıldığında yine aynı yazım ortaya çıkıyor:
 
-for {
-  a <- getFirstNumber // getFirstNumber returns Future[Int]
-  b <- getSecondNumber // getSecondNumber returns Future[Int]
-} yield a + b
+//for {
+//  a <- getFirstNumber // getFirstNumber returns Future[Int]
+//  b <- getSecondNumber // getSecondNumber returns Future[Int]
+//} yield a + b
 // The final result is a Future[Int]---a data structure
 // that will eventually allow us to access the result of
 // applying `+` to `a` and `b`

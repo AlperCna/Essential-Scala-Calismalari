@@ -26,7 +26,7 @@ Fold olmayan veri tiplerinde de çalışabilir
 
 //5.5.1 Map
 
-//Wlimizde bir veri var map bunun içindeki deperleri balka bir şeye dönüştürmeye yarıyor
+//Elimizde bir veri var map bunun içindeki değerleri başka bir şeye dönüştürmeye yarıyor
 
 /*
 Örnek olarak elimizde bir List[Int] var
@@ -96,15 +96,15 @@ final case class End[A]() extends LinkedList[A]
 
 
 
-case Pair(hd, tl) => {
-  val newTail: LinkedList[B] = tail.map(fn)
-  // Combine newTail and head to create LinkedList[B]
-}
+//case Pair(hd, tl) => {
+//  val newTail: LinkedList[B] = tail.map(fn)
+//  // Combine newTail and head to create LinkedList[B]
+//}
 
 //We can convert head to a B using fn, and then build a larger list from newTail
 //and our B giving us the final soluঞon
 
-case Pair(hd, tl) => Pair(fn(hd), tl.map(fn))
+//case Pair(hd, tl) => Pair(fn(hd), tl.map(fn))
 
 //For End we don’t have any value of A to apply to the funcঞon. The only
 //thing we can return is an End.
@@ -437,13 +437,13 @@ else Empty() })
 
 //5.5.4.4 Sum
 //Recall our Sum type.
-sealed trait Sum[A, B] {
-def fold[C](left: A => C, right: B => C): C =
-this match {
-case Left(a) => left(a)
-case Right(b) => right(b)
-}
-}
+//sealed trait Sum[A, B] {
+//def fold[C](left: A => C, right: B => C): C =
+//this match {
+//case Left(a) => left(a)
+//case Right(b) => right(b)
+//}
+//}
 //final case class Left[A, B](value: A) extends Sum[A, B]
 //final case class Right[A, B](value: B) extends Sum[A, B]
 //To prevent a name collision between the built-in Either, rename the Left

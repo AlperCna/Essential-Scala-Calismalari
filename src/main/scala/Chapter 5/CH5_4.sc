@@ -108,7 +108,7 @@ def intOrString(input: Boolean) =
   if(input == true) 123 else "abc"
 
 // Sxala tipi any olarak çıkarır çünkü bu yapı hem Int hem String dçnebiliyor bunların
-// En küçük ortak tipi ant olmş oluyor
+// En küçük ortak tipi any olmş oluyor
 
 //Çözümü sum type kullanmak yani kendi tipimizi kullanıyoruz
 

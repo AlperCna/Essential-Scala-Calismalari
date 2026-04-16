@@ -4,9 +4,9 @@
 //interfaces that act as if they were methods defined on the classes of interest.
 //For example, suppose we have a method called numberOfVowels:
 
-//Type class yazdık ✔
-//Implicit parametre kullandık ✔
-//apply pattern gördük ✔
+//Type class yazdık
+//Implicit parametre kullandık
+//apply pattern gördük
 //
 //Ama hâlâ kullanım biraz “yapay”:
 

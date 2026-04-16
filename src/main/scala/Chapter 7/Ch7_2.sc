@@ -37,7 +37,7 @@
 // Bu, Scala type class sisteminin en güçlü yanlarından biridir. Çünkü kullanıcı ayrıca import yapmadan da bir instance bulunabilir.
 
 
-def sorted[B >: A](implicit ord: math.Ordering[B]): List[A]
+//def sorted[B >: A](implicit ord: math.Ordering[B]): List[A]
 
 //Burada compiler hangi companion object’lere bakar?
 
@@ -128,12 +128,12 @@ object Rational {
 }
 
 
-Object Example {
-  def example() =
-    assert(List(Rational(1, 2), Rational(3, 4), Rational(1, 3)).sorted
-      ==
-      List(Rational(1, 3), Rational(1, 2), Rational(3, 4)))
-}
+//Object Example {
+//  def example() =
+//    assert(List(Rational(1, 2), Rational(3, 4), Rational(1, 3)).sorted
+//      ==
+//      List(Rational(1, 3), Rational(1, 2), Rational(3, 4)))
+//}
 
 // bu sefer kod derleniyor ve çalışıyor
 

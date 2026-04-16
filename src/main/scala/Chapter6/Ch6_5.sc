@@ -155,20 +155,20 @@ def addOptions(opt1: Option[Int], opt2: Option[Int], opt3: Option[Int]) =
 //Write a method divide that accepts two Int parameters and divides one by
 //the other. Use Option to avoid excepঞons when the denominator is 0.
 
-def divide(numerator: Int, denominator: Int) =
-  if(denominator == 0) None else Some(numerator / denominator)
-
-
-  //Using your divide method and a for comprehension, write a method called
-//divideOptions that accepts two parameters of type Option[Int] and divides one by the other:
-
-def divideOptions(numerator: Option[Int], denominator: Option[Int]) =
-  for {
-    a <- numerator
-    b <- denominator
-    c <- divide(a, b)
-  } yield c
-
+//def divide(numerator: Int, denominator: Int) =
+//  if(denominator == 0) None else Some(numerator / denominator)
+//
+//
+//  //Using your divide method and a for comprehension, write a method called
+////divideOptions that accepts two parameters of type Option[Int] and divides one by the other:
+//
+//def divideOptions(numerator: Option[Int], denominator: Option[Int]) =
+//  for {
+//    a <- numerator
+//    b <- denominator
+//    c <- divide(a, b)
+//  } yield c
+//
 
 
 
@@ -195,45 +195,46 @@ def divideOptions(numerator: Option[Int], denominator: Option[Int]) =
 
 
 
-def calculator(operand1: String, operator: String, operand2: String):
-Unit = {
-  val result = for {
-    a <- readInt(operand1)
-    b <- readInt(operand2)
-    ans <- operator match {
-      case "+" => Some(a + b)
-      case "-" => Some(a - b)
-      case "*" => Some(a * b)
-      case "/" => divide(a, b)
-      case _ => None
-    }
-  } yield ans
-  result match {
-    case Some(number) => println(s"The answer is $number!")
-    case None => println(s"Error calculating $operand1 $operator $operand2")
-  }
+//def calculator(operand1: String, operator: String, operand2: String):
+//Unit = {
+//  val result = for {
+//    a <- readInt(operand1)
+//    b <- readInt(operand2)
+//    ans <- operator match {
+//      case "+" => Some(a + b)
+//      case "-" => Some(a - b)
+//      case "*" => Some(a * b)
+//      case "/" => divide(a, b)
+//      case _ => None
+//    }
+//  } yield ans
+//  result match {
+//    case Some(number) => println(s"The answer is $number!")
+//    case None => println(s"Error calculating $operand1 $operator $operand2")
+//  }
 }
 //Another approach involves factoring the calculaঞon part out into its own private funcঞon:
-def calculator(operand1: String, operator: String, operand2: String):
-Unit = {
-  def calcInternal(a: Int, b: Int) =
-    operator match {
-      case "+" => Some(a + b)
-      case "-" => Some(a - b)
-      case "*" => Some(a * b)
-      case "/" => divide(a, b)
-      case _ => None
-    }
-  val result = for {
-    a <- readInt(operand1)
-    b <- readInt(operand2)
-    ans <- calcInternal(a, b)
-  } yield ans
-  result match {
-    case Some(number) => println(s"The answer is $number!")
-    case None => println(s"Error calculating $operand1 $operator $operand2")
-  }
-}
+
+//def calculator(operand1: String, operator: String, operand2: String):
+//Unit = {
+//  def calcInternal(a: Int, b: Int) =
+//    operator match {
+//      case "+" => Some(a + b)
+//      case "-" => Some(a - b)
+//      case "*" => Some(a * b)
+//      case "/" => divide(a, b)
+//      case _ => None
+//    }
+//  val result = for {
+//    a <- readInt(operand1)
+//    b <- readInt(operand2)
+//    ans <- calcInternal(a, b)
+//  } yield ans
+//  result match {
+//    case Some(number) => println(s"The answer is $number!")
+//    case None => println(s"Error calculating $operand1 $operator $operand2")
+//  }
+//}
 
 
 //For the enthusiasঞc only, write a second version of your code using flatMap
@@ -241,27 +242,28 @@ Unit = {
 
 //This version of the code is much clearer if we factor out the calculaঞon part
 //  into its own funcঞon. Without this it would be very hard to read:
-def calculator(operand1: String, operator: String, operand2: String):
-Unit = {
-  def calcInternal(a: Int, b: Int) =
-    operator match {
-      case "+" => Some(a + b)
-      case "-" => Some(a - b)
-      case "*" => Some(a * b)
-      case "/" => divide(a, b)
-      case _ => None
-    }
-  val result =
-    readInt(operand1) flatMap { a =>
-      readInt(operand2) flatMap { b =>
-        calcInternal(a, b) map { result =>
-          result
-        }
-      }
-    }
-  result match {
-    case Some(number) => println(s"The answer is $number!")
-    case None => println(s"Error calculating $operand1
-      $operator $operand2")
-  }
-}
+
+//def calculator(operand1: String, operator: String, operand2: String):
+//Unit = {
+//  def calcInternal(a: Int, b: Int) =
+//    operator match {
+//      case "+" => Some(a + b)
+//      case "-" => Some(a - b)
+//      case "*" => Some(a * b)
+//      case "/" => divide(a, b)
+//      case _ => None
+//    }
+//  val result =
+//    readInt(operand1) flatMap { a =>
+//      readInt(operand2) flatMap { b =>
+//        calcInternal(a, b) map { result =>
+//          result
+//        }
+//      }
+//    }
+//  result match {
+//    case Some(number) => println(s"The answer is $number!")
+//    case None => println(s"Error calculating $operand1
+//      $operator $operand2")
+//  }
+//}

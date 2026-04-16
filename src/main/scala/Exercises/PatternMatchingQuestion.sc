@@ -3,15 +3,14 @@
 def sqrt(n: Double): Double =
   n match {
     case x if x < 0 => Double.NaN
-    case 0 => 0
-    case 1 => 1
+    case 0          => 0
+    case 1          => 1
     case _ =>
-      var guess = 1.0
-      while ((guess * guess - n).abs >= 0.0001) {
-        guess = (guess + n / guess) / 2
-      }
+      def iterate(guess: Double): Double =
+        if ((guess * guess - n).abs < 0.0001) guess
+        else iterate((guess + n / guess) / 2)
 
-      guess
+      iterate(1.0)
   }
 
 //recursion

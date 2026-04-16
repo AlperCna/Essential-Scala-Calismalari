@@ -106,7 +106,7 @@ object HtmlWriter {
 }
 
 
-HtmlWriter[Person].write(Person("Noel", "noel@example.org"))
+//HtmlWriter[Person].write(Person("Noel", "noel@example.org"))
 
 
 //HtmlWriter[Person] çağrıldı

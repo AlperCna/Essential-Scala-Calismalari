@@ -167,7 +167,7 @@ val placeholderFoo2: Int => Int = foo(_) + b
 
 //5.3.3 Converting Methods to Functions
 
-// bu yapı placeholder syntazda doğrudan bağlantılu
+// bu yapı placeholder syntazda doğrudan bağlantılı
 
 //Method ile function aynı şey değil.
 object Sum {
@@ -176,7 +176,6 @@ object Sum {
 }
 
 val sumAsFunction: (Int, Int) => Int = Sum.sum _
-
 //Çözümü underscore
 
 val sumAsFunctionWithUnderscore: (Int, Int) => Int = Sum.sum _ // bu methodu functiona çevirir

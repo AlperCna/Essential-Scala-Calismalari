@@ -27,7 +27,7 @@ def generic[A](in: A): A = in
 
 generic[String]("foo")
 
-generic(1
+generic(1)
 
 
 //Type parameter, method parameter gibi çalışır:
@@ -59,7 +59,7 @@ analogy conঞnues when extending a trait that has type parameters. Extending a 
 method and we must supply values for any type parameters of the trait we’re
 extending.
 In previous secঞons we’ve seen sum types like the following:
- */,
+ */
 
 sealed trait Calculation
 case class Success(result: Double)

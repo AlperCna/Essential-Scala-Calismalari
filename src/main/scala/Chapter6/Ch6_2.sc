@@ -40,7 +40,7 @@
 
 val sequence = Seq(1, 2, 3)
 // sequence: Seq[Int] = List(1, 2, 3)
-sequence.map(elt => elt * 2)
+sequence.map(x => x * 2)
 // res0: Seq[Int] = List(2, 4, 6)
 
 //If we use placeholder syntax we can write this even more compactly:
